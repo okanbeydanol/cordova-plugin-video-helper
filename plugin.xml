@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         id="cordova-plugin-video-helper"
-        version="1.0.0">
+        version="2.0.0">
     <name>Video Helper for Cordova</name>
     <description>Video Compress Info</description>
     <license>Apache 2.0 License</license>
