@@ -1,0 +1,53 @@
+{
+  "_from": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+  "_id": "cordova-plugin-video-helper@1.0.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-video-helper",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+    "rawSpec": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+    "saveSpec": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+    "fetchSpec": "https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git#eb14328ff5657352981ed8fdab144cc5f20805bd",
+  "_spec": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
+  "_where": "/Users/okanbeydanol/Desktop/cordova-plugin-video-helper",
+  "author": {
+    "name": "Okan Beydanol"
+  },
+  "bugs": {
+    "url": "https://github.com/okanbeydanol/cordova-plugin-video-helper/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-video-helper",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Compress Video and get video infos.",
+  "homepage": "https://github.com/okanbeydanol/cordova-plugin-video-helper#readme",
+  "keywords": [
+    "cordova",
+    "android",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-video-helper",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git"
+  },
+  "version": "1.0.0"
+}
