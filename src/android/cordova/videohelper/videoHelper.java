@@ -250,12 +250,9 @@ public class VideoHelper extends CordovaPlugin {
         retriever.release();
         callback.success(videoInfo);
       } catch (Exception e) {
-        assert retriever != null;
-        retriever.release();
         callback.error("Failed to retrieve video metadata: " + e.getMessage());
       }
     });
-
   }
 
   private void createThumbnail(JSONArray args, CallbackContext callbackContext) {
