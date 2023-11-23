@@ -52,10 +52,12 @@ public class FFMpegUtils {
       String.valueOf(duration),
       "-i",
       videoPath,
-      "-c:a",
-      "copy",
       "-c:v",
-      "copy",
+      "libx264", // Set the video codec to libx264 for video/avc
+      "-c:a",
+      "aac", // Set the audio codec to aac for audio/mp4a-latm
+      "-strict",
+      "experimental", // This might be required for some versions of FFmpeg for AAC encoding
       outputPathForTrim
     };
   }
