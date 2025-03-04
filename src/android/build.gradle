@@ -5,7 +5,7 @@ repositories{
 }
 
 dependencies {
-    implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
+    implementation 'com.github.tanersener:mobile-ffmpeg:v4.4.LTS'
     implementation 'com.github.okanbeydanol:android-transcoder:78c0f24a486ad78eaa7ce86302d77fbf6c1c46b8'
 }
 
