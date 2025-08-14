@@ -1,6 +1,6 @@
 {
   "_from": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git",
-  "_id": "cordova-plugin-video-helper@2.0.4",
+  "_id": "cordova-plugin-video-helper@2.0.5",
   "_inBundle": false,
   "_integrity": "",
   "_location": "/cordova-plugin-video-helper",
@@ -49,5 +49,7 @@
     "type": "git",
     "url": "git+https://github.com/okanbeydanol/cordova-plugin-video-helper.git"
   },
-  "version": "2.0.4"
+  "main": "www/VideoHelper.js",
+  "types": "www/VideoHelper.d.ts",
+  "version": "2.0.5"
 }

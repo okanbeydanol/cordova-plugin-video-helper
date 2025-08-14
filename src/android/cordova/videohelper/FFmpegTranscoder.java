@@ -1,4 +1,4 @@
-package android.cordova.videohelper;
+package com.okanbeydanol.videoHelper;
 
 import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.ExecuteCallback;

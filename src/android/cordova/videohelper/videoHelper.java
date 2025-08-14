@@ -1,4 +1,4 @@
-package android.cordova.videohelper;
+package com.okanbeydanol.videoHelper;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;

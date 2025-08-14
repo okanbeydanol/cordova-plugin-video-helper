@@ -1,4 +1,4 @@
-package android.cordova.videohelper;
+package com.okanbeydanol.videoHelper;
 
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;

@@ -1,4 +1,4 @@
-package android.cordova.videohelper;
+package com.okanbeydanol.videoHelper;
 
 import java.io.File;
 import java.util.ArrayList;

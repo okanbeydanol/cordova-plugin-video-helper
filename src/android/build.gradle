@@ -1,11 +1,15 @@
 
-repositories{
-    jcenter()
+repositories {
+    maven {
+        url "https://okanbeydanol.github.io/maven-artifacts/"
+    }
+    mavenCentral()
+    google()
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    implementation 'com.github.tanersener:mobile-ffmpeg:v4.4.LTS'
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4-lts@aar'
     implementation 'com.github.okanbeydanol:android-transcoder:78c0f24a486ad78eaa7ce86302d77fbf6c1c46b8'
 }
 
@@ -15,3 +19,24 @@ android {
         exclude 'META-INF/LICENSE'
     }
 }
+
+// repositories {
+//     maven {
+//         url "https://nexus.web.cern.ch/nexus/content/groups/public/"
+//     }
+//     mavenCentral()
+//     google()
+//     maven { url "https://jitpack.io" }
+// }
+
+// dependencies {
+//     implementation 'com.arthenica:mobile-ffmpeg-full:4.4.LTS'
+//     implementation 'com.github.okanbeydanol:android-transcoder:78c0f24a486ad78eaa7ce86302d77fbf6c1c46b8'
+// }
+
+// android {
+//     packagingOptions {
+//         exclude 'META-INF/NOTICE'
+//         exclude 'META-INF/LICENSE'
+//     }
+// }

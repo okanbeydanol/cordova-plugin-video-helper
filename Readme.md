@@ -1,259 +1,123 @@
-[![npm version](https://badge.fury.io/js/cordova-plugin-video-editor.svg)](https://badge.fury.io/js/cordova-plugin-video-editor)
+# [Cordova Video Helper](https://github.com/okanbeydanol/cordova-plugin-video-helper) [![Release](https://img.shields.io/npm/v/cordova-plugin-video-helper.svg?style=flat)](https://github.com/okanbeydanol/cordova-plugin-video-helper/releases)
 
-This is a cordova plugin to assist in several video editing tasks such as:
+This plugin provides a simple way to perform video editing tasks in Cordova apps:
 
 * Transcoding
 * Trimming
-* Creating thumbnails from a video file with specific time in the video
-* Getting info on a video - width, height, orientation, duration, size, & bitrate.
+* Creating thumbnails
+* Getting video info (width, height, orientation, duration, size, bitrate)
 
-This plugin will address those concerns, hopefully.
+Supports Android and iOS.
 
-## Installation
+## Plugin setup
 
-```
-cordova plugin add cordova-plugin-video-helper
-```
+Using this plugin requires [Cordova iOS](https://github.com/apache/cordova-ios) and [Cordova Android](https://github.com/apache/cordova-android).
 
-`VideoHelper` will be available in the window after deviceready.
+1. `cordova plugin add cordova-plugin-video-helper`--save
 
 ## Usage
 
-### Transcode a video
+### JavaScript (Global Cordova)
+After the device is ready, you can use the plugin via the global `cordova.plugins.VideoHelper` object:
 
 ```javascript
-// parameters passed to transcodeVideo
-window.VideoHelper.transcodeVideo(
-    success, // success cb
-    error, // error cb
-    {
-        fileUri: 'file-uri-here', // the path to the video on the device
-        outputFileName: 'output-name', // the file name for the transcoded video
-        width: 340, // optional, see note below on width and height
-        height: 640, // optional, see notes below on width and height
-        videoBitrate: 5000000, // optional, bitrate in bits, defaults to 5 megabit (5000000),
-        duration: 60, // optinal for triming while compressing
-        type: 'ffmpeg' // optinal default for ffmpeg. You can use MediaCoder for compress(Only android)
-    }
-);
+var VideoHelper = cordova.plugins.VideoHelper;
+
+// Transcode a video
+VideoHelper.transcodeVideo({
+    fileUri: 'file-uri-here',
+    outputFileName: 'output-name',
+    width: 340,
+    height: 640,
+    videoBitrate: 5000000,
+    duration: 60,
+    type: 'ffmpeg'
+}, success, error);
+
+// Trim a video
+VideoHelper.trim({
+    fileUri: 'file-uri-here',
+    trimStart: 0,
+    outputFileName: 'output-name'
+}, trimSuccess, trimFail);
+
+// Create a thumbnail
+VideoHelper.createThumbnail({
+    fileUri: 'file-uri-here',
+    outputFileName: 'output-name',
+    atTime: 2,
+    width: 320,
+    height: 480,
+    quality: 100
+}, success, error);
+
+// Get video info
+VideoHelper.getVideoInfo('file-uri-here', getVideoInfoSuccess, getVideoInfoError);
 ```
 
-#### transcodeVideo example -
+### TypeScript / ES Module / Ionic
+You can also use ES module imports (with TypeScript support):
 
-```javascript
-// this example uses the cordova media capture plugin
-window.device.capture.captureVideo(
-    videoCaptureSuccess,
-    videoCaptureError,
-    {
-        limit: 1,
-        duration: 20
-    }
-);
+```typescript
+import { VideoHelper } from 'cordova-plugin-video-helper';
 
-function videoCaptureSuccess(mediaFiles) {
-    var outputFileName = (
-        new Date().getTime()
-    ).toString() + (
-        outputFileName ? outputFileName : this.getFileNameFromURL(fileUrl)
-    );
-    const mediaSizeResult: {
-        error: boolean,
-        data: { bitrate: string, duration: string, height: string, orientation: string, size: number, width: string }
-    } = this.getVideoInformation(fileUrl);
+// Transcode a video
+VideoHelper.transcodeVideo({
+    fileUri: 'file-uri-here',
+    outputFileName: 'output-name',
+    width: 340,
+    height: 640,
+    videoBitrate: 5000000,
+    duration: 60,
+    type: 'ffmpeg'
+}, (info) => {
+    console.log('Transcode info:', info);
+}, (error) => {
+    console.error('Transcode error:', error);
+});
 
-    const originalSize = Math.floor(+mediaSizeResult.data.size / 1024) / 1000 + 'MB';
-    const originalBitrate = +mediaSizeResult.data.bitrate;
-    const originalPath = fileUrl;
-    let width: number = 360;
-    let height: number = 640;
-    if (maintainAspectRatio) {
-        const aspectRatio: {
-            width: number,
-            height: number
-        } = this.getAspectRatio(Math.floor(+mediaSizeResult.data.width), +mediaSizeResult.data.height);
-        width = aspectRatio.width;
-        height = aspectRatio.height;
-    }
+// Trim a video
+VideoHelper.trim({
+    fileUri: 'file-uri-here',
+    trimStart: 0,
+    outputFileName: 'output-name'
+}, (result) => {
+    console.log('Trimmed video path:', result);
+}, (error) => {
+    console.error('Trim error:', error);
+});
 
-    window.VideoHelper.transcodeVideo(
-        {
-            fileUri,
-            outputFileName,
-            width,
-            height,
-            videoBitrate,
-            duration,
-            type
-        },
-        async (info: {
-            progress: number,
-            completed: boolean,
-            error: boolean,
-            data: string,
-            message: string
-        }): Promise<any> => {
-            if (info.error) {
-                return resolve({error: true, data: null, message: info.message});
-            }
-            if (info.completed) {
-                const mediaSizeResult: {
-                    error: boolean,
-                    data: {
-                        bitrate: string,
-                        duration: string,
-                        height: string,
-                        orientation: string,
-                        size: number,
-                        width: string
-                    }
-                } = await this.getVideoInformation(info.data);
-                return resolve({error: false, data: mediaSizeResult.data, message: null});
-            } else {
-                console.log('transCodeVideo - Progresss:', info);
-            }
-        },
-        (error) => {
-            console.error('Error transCodeVideo:', error);
-            return resolve({error: true, data: null, message: error.message});
-        }
-    );
-}
-
-function getVideoInformation(videoPath: string) {
-    return new Promise(async (resolve: <T>(value: {
-        error: boolean,
-        data: { bitrate: string, duration: string, height: string, orientation: string, size: number, width: string }
-    }) => void): Promise<void> => {
-        window.VideoHelper.getVideoInfo(
-            videoPath,
-            (info): any => {
-                return resolve({error: false, data: info});
-            },
-            (error) => {
-                console.error('Error fetching video info:', error);
-                return resolve({error: true, data: null});
-            }
-        );
-    });
-}
-
-function getAspectRatio(width: number, height: number, scaledWidth: number = 640, scaledHeight: number = 640) {
-    const videoWidth = width > height ? height : width;
-    const videoHeight = width > height ? width : height;
-    const aspectRatio = videoWidth / videoHeight;
-
-    const newWidth = scaledWidth && scaledHeight ? scaledHeight * aspectRatio : videoWidth;
-    const newHeight = scaledWidth && scaledHeight ? newWidth / aspectRatio : videoHeight;
-
-    return {width: newWidth, height: newHeight};
-}
-
-function getFileNameFromURL(url) {
-    if (!url) {
-        return (
-            new Date().getTime()
-        ).toString();
-    }
-    let fileName = url.substr(url.lastIndexOf('/') + 1);
-    if (fileName.indexOf('?') != -1) {
-        fileName = fileName.substr(0, fileName.indexOf('?'));
-    }
-    const split = fileName.split('.');
-    if (split.length > 1) {
-        fileName = split.slice(0, split.length - 1).join('_');
-    } else if (split.length > 0) {
-        fileName = split[0];
-    }
-    return fileName;
-}
-```
-
-### Trim a Video
-
-```javascript
-VideoHelper.trim(
-    {
-        fileUri: 'file-uri-here', // path to input video
-        duration: 15, // time to end trimming in seconds
-        outputFileName: 'output-name', // output file name
-    },
-    trimSuccess,
-    trimFail,
-);
-
-function trimSuccess(result) {
-    // result is the path to the trimmed video on the device
-    console.log('trimSuccess, result: ' + result);
-}
-
-function trimFail(err) {
-    console.log('trimFail, err: ' + err);
-}
-```
-
-### Create a JPEG thumbnail from a video
-
-```javascript
-VideoHelper.createThumbnail(
-    {
-        fileUri: 'file-uri-here', // the path to the video on the device
-        outputFileName: 'output-name', // the file name for the JPEG image
-        atTime: 2, // optional, location in the video to create the thumbnail (in seconds)
-        width: 320, // optional, width of the thumbnail
-        height: 480, // optional, height of the thumbnail
-    },
-    success, // success cb
-    error, // error cb
-);
-// atTime will default to 0 if not provided
-// width and height will be the same as the video input if they are not provided
-// quality will default to 100 if not provided
-```
-
+//Create a JPEG thumbnail from a video
+VideoHelper.createThumbnail({
+    fileUri: 'file-uri-here',
+    outputFileName: 'output-name',
+    atTime: 2,
+    width: 320,
+    height: 480,
+    quality: 100
+}, (path) => {
+    console.log('Thumbnail path:', path);
+}, (error) => {
+    console.error('Thumbnail error:', error);
+});
 #### A note on width and height used by createThumbnail
-
 The aspect ratio of the thumbnail created will match that of the video input. This means you may not get exactly the
 width and height dimensions you give to `createThumbnail` for the jpeg. This for your convenience but let us know if it
 is a problem.
 
-### Get info on a video (width, height, orientation, duration, size, & bitrate)
-
-```javascript
-VideoHelper.getVideoInfo(
-    success, // success cb
-    error, // error cb
-    {
-        fileUri: 'file-uri-here', // the path to the video on the device
-    }
-);
+//Get info on a video (width, height, orientation, duration, size, & bitrate)
+VideoHelper.getVideoInfo('file-uri-here', (info) => {
+    console.log('Video info:', info);
+}, (error) => {
+    console.error('Video info error:', error);
+});
 ```
 
-```javascript
-VideoHelper.getVideoInfo(
-    getVideoInfoSuccess,
-    getVideoInfoError,
-    {
-        fileUri: file.fullPath
-    }
-);
+TypeScript Types
+Type definitions are included. You get full autocompletion and type safety in TypeScript/Ionic projects.
 
-function getVideoInfoSuccess(info) {
-    console.log('getVideoInfoSuccess, info: ' + JSON.stringify(info, null, 2));
-    {
-        /*
-        width: 1920,
-        height:1080,
-        orientation:'landscape', // will be portrait or landscape
-        duration:3.541, // duration in seconds
-        size:6830126, // size of the video in bytes
-        bitrate:15429777 // bitrate of the video in bits per second,
-        videoMediaType: 'video/3gpp' // Media type of the video, android example: 'video/3gpp', ios example: 'avc1',
-        audioMediaType: 'audio/mp4a-latm' // Media type of the audio track in video, android example: 'audio/mp4a-latm', ios example: 'aac',
-         */
-    }
-}
-```
+* Check the [Typescript definitions](https://github.com/okanbeydanol/cordova-plugin-video-helper/tree/master/www/VideoHelper.d.ts) for additional configuration.
+
 
 ## On iOS
 
@@ -278,3 +142,38 @@ function getVideoInfoSuccess(info) {
 [How to Port ffmpeg (the Program) to Android–Ideas and Thoughts](http://www.roman10.net/how-to-port-ffmpeg-the-program-to-androidideas-and-thoughts/)
 
 [How to Build Android Applications Based on FFmpeg by An Example](http://www.roman10.net/how-to-build-android-applications-based-on-ffmpeg-by-an-example/)
+
+
+## Communication
+
+- If you **need help**, use [Stack Overflow](http://stackoverflow.com/questions/tagged/cordova). (Tag `cordova`)
+- If you **found a bug** or **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
+
+## Contributing
+
+Patches welcome! Please submit all pull requests against the master branch. If your pull request contains JavaScript patches or features, include relevant unit tests. Thanks!
+
+## Copyright and license
+
+    The MIT License (MIT)
+
+    Copyright (c) 2024 Okan Beydanol
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
