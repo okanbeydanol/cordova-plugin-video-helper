@@ -2,7 +2,7 @@
 <plugin
   xmlns="http://apache.org/cordova/ns/plugins/1.0"
   id="cordova-plugin-video-helper"
-  version="2.0.6"
+  version="2.0.7"
 >
   <name>Video Helper for Cordova</name>
   <description>Video Compress Info</description>
@@ -20,19 +20,12 @@
       </feature>
     </config-file>
     <source-file
-      src="src/android/cordova/videohelper/CustomAndroidFormatStrategy.java"
+      src="src/android/CustomAndroidFormatStrategy.java"
       target-dir="src/com/okanbeydanol/videoHelper"
     />
+    <source-file src="src/android/VideoHelper.java" target-dir="src/com/okanbeydanol/videoHelper" />
     <source-file
-      src="src/android/cordova/videohelper/VideoHelper.java"
-      target-dir="src/com/okanbeydanol/videoHelper"
-    />
-    <source-file
-      src="src/android/cordova/videohelper/FFmpegTranscoder.java"
-      target-dir="src/com/okanbeydanol/videoHelper"
-    />
-    <source-file
-      src="src/android/cordova/videohelper/FFMpegUtils.java"
+      src="src/android/TranscodeJsonResponse.java"
       target-dir="src/com/okanbeydanol/videoHelper"
     />
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
