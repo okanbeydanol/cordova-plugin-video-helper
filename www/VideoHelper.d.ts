@@ -7,7 +7,6 @@ declare namespace CordovaPlugins {
         height?: number;
         videoBitrate?: number;
         duration: number;
-        type: string;
     }
 
     interface VideoHelperTrimProperties {

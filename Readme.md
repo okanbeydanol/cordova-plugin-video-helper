@@ -31,7 +31,6 @@ VideoHelper.transcodeVideo({
     height: 640,
     videoBitrate: 5000000,
     duration: 60,
-    type: 'ffmpeg'
 }, success, error);
 
 // Trim a video
@@ -69,7 +68,6 @@ VideoHelper.transcodeVideo({
     height: 640,
     videoBitrate: 5000000,
     duration: 60,
-    type: 'ffmpeg'
 }, (info) => {
     console.log('Transcode info:', info);
 }, (error) => {
@@ -139,10 +137,7 @@ Type definitions are included. You get full autocompletion and type safety in Ty
 
 [Android Media Stores](http://developer.android.com/reference/android/provider/MediaStore.html#EXTRA_VIDEO_QUALITY)
 
-[How to Port ffmpeg (the Program) to Android–Ideas and Thoughts](http://www.roman10.net/how-to-port-ffmpeg-the-program-to-androidideas-and-thoughts/)
-
-[How to Build Android Applications Based on FFmpeg by An Example](http://www.roman10.net/how-to-build-android-applications-based-on-ffmpeg-by-an-example/)
-
+[Android Transcoder](https://github.com/okanbeydanol/android-transcoder)
 
 ## Communication
 
